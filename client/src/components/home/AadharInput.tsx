@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { UploadCloud, X } from "lucide-react";
-import { fileToBase64 } from "../lib/utils";
+import { fileToBase64 } from "../../lib/utils"; 
 
 interface AadharInputProps {
   label: string;
