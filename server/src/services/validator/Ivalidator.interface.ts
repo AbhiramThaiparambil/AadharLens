@@ -1,4 +1,4 @@
-import type { RawAadhaarFields, ParsedAadhaarData } from '../../domain/entities/aadhaar.entity.js';
+import type { RawAadhaarFields, ParsedAadhaarData } from '../../application/entities/aadhaar.entity.js';
 export interface IValidatorService {
   validate(raw: RawAadhaarFields): ParsedAadhaarData;
 }
