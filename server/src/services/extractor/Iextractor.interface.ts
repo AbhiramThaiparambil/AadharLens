@@ -1,4 +1,4 @@
-import type { RawAadhaarFields } from '../../domain/entities/aadhaar.entity.js';
+import type { RawAadhaarFields } from '../../application/entities/aadhaar.entity.js';
 export interface IExtractorService {
   extract(frontText: string, backText: string): RawAadhaarFields;
 }

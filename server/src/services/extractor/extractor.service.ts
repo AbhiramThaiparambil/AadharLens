@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import type { IExtractorService } from './Iextractor.interface.js';
-import type { RawAadhaarFields } from '../../domain/entities/aadhaar.entity.js';
+import type { RawAadhaarFields } from '../../application/entities/aadhaar.entity.js';
 import {
   cleanText,
   extractUid,

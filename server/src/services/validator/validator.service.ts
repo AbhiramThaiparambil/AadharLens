@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { injectable } from 'tsyringe';
 import { parse as parseDate, isValid, differenceInYears } from 'date-fns';
 import type { IValidatorService } from './Ivalidator.interface.js';
-import type { RawAadhaarFields, ParsedAadhaarData } from '../../domain/entities/aadhaar.entity.js';
+import type { RawAadhaarFields, ParsedAadhaarData } from '../../application/entities/aadhaar.entity.js';
 const rawAadhaarSchema = z.object({
   uid: z
     .string()
