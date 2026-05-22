@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { UploadCloud, X } from "lucide-react";
 import { fileToBase64 } from "../../lib/utils"; 
+import { validateImage } from "../../lib/validateImage";
+import toast from "react-hot-toast";
 
 interface AadharInputProps {
   label: string;
@@ -17,6 +19,8 @@ const AadharInput: React.FC<AadharInputProps> = ({ label, onDrop }) => {
 
     const getPreview = async () => {
       try {
+
+
         if (file) {
           const base64 = await fileToBase64(file);
 
@@ -39,6 +43,15 @@ const AadharInput: React.FC<AadharInputProps> = ({ label, onDrop }) => {
   }, [file]);
 
   const handleFile = (selectedFile: File) => {
+
+
+  if(!selectedFile)return
+
+  if (!validateImage(selectedFile)) {
+    toast.error("Please upload a valid image");
+    return;
+  }
+
     setFile(selectedFile);
     onDrop(selectedFile);
   };
