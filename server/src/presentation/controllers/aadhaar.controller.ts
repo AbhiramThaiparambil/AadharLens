@@ -1,6 +1,8 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
 import type { IParseAadhaarUseCase } from '../../application/use-cases/parse-aadhaar/Iparse-aadhaar.usecase.js';
+import { ResponseMessage } from '../../constants/ResponseMessage.js';
+import { HttpStatus } from '../../constants/httpStatus.js';
 @injectable()
 export class AadhaarController {
   constructor(
@@ -8,11 +10,11 @@ export class AadhaarController {
   ) {}
   
   public getWelcomeMessage = (_req: Request, res: Response): void => {
-    res.status(200).json({ message: 'Welcome to AadhaarLens ' });
+    res.status(HttpStatus.OK).json({ message: ResponseMessage.WELCOME });
   };
 
   
-  public parseAadhaar = async (req: Request, res: Response): Promise<void> => {
+  public parseAadhaar = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
     try {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
       if (
@@ -20,20 +22,21 @@ export class AadhaarController {
         !files['frontFile'] || files['frontFile'].length === 0 ||
         !files['backFile']  || files['backFile'].length  === 0
       ) {
-        res.status(400).json({ error: 'Both front and back Aadhaar images are required' });
+        res.status(HttpStatus.BAD_GATEWAY).json({ error: ResponseMessage.BOTH_IMAGES_REQUIRED});
         return;
       }
       const frontBuffer = (files['frontFile'][0] as Express.Multer.File).buffer;
       const backBuffer  = (files['backFile'][0]  as Express.Multer.File).buffer;
       const result = await this.parseAadhaarUseCase.execute(frontBuffer, backBuffer);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         status:  true,
         data:    result,
-        message: 'Parsing Successful',
+        message: ResponseMessage.PARSE_SUCCESS,
       });
     } catch (error) {
       console.error('Error parsing Aadhaar:', error);
-      res.status(500).json({ error: 'An error occurred during parsing' });
+
+      next(error)
     }
   };
 }
