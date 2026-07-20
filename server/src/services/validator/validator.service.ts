@@ -39,21 +39,21 @@ const rawAadhaarSchema = z.object({
 export class ZodAadhaarValidator implements IValidatorService {
   validate(raw: RawAadhaarFields): ParsedAadhaarData {
     const result    = rawAadhaarSchema.safeParse(raw);
-    const validated = result.success ? result.data : this.partialFallback(raw);
+    const validated = result.success ? result.data : this._partialFallback(raw);
     return {
       Name:          validated.name         ?? 'Not Found',
       DOB:           validated.dob          ?? 'Not Found',
       Gender:        validated.gender       ?? 'Not Found',
-      UID:           this.formatUid(validated.uid),
+      UID:           this._formatUid(validated.uid),
       address:       validated.address      ?? 'Not Found',
       pincode:       validated.pincode      ?? 'Not Found',
-      age_band:      this.computeAgeBand(validated.dob),
+      age_band:      this._computeAgeBand(validated.dob),
       MobileNumber:  validated.mobileNumber ?? 'Not Found',
       isUidSame:     'Verified',
       document_type: 'Aadhaar',
     };
   }
-  private partialFallback(raw: RawAadhaarFields): z.infer<typeof rawAadhaarSchema> {
+  private _partialFallback(raw: RawAadhaarFields): z.infer<typeof rawAadhaarSchema> {
     const s = rawAadhaarSchema.shape;
     return {
       uid:          s.uid.safeParse(raw.uid).data,
@@ -65,11 +65,11 @@ export class ZodAadhaarValidator implements IValidatorService {
       mobileNumber: s.mobileNumber.safeParse(raw.mobileNumber).data,
     };
   }
-  private formatUid(uid?: string): string {
+  private _formatUid(uid?: string): string {
     if (!uid || uid.length !== 12) return 'Not Found';
     return `${uid.slice(0, 4)} ${uid.slice(4, 8)} ${uid.slice(8, 12)}`;
   }
-  private computeAgeBand(dob?: string): string {
+  private _computeAgeBand(dob?: string): string {
     if (!dob) return 'Unknown';
     const parsed = parseDate(dob, 'dd/MM/yyyy', new Date());
     if (!isValid(parsed)) return 'Unknown';

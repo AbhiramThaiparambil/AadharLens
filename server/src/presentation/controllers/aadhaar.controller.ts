@@ -6,7 +6,7 @@ import { HttpStatus } from '../../constants/httpStatus.js';
 @injectable()
 export class AadhaarController {
   constructor(
-    @inject('IParseAadhaarUseCase') private readonly parseAadhaarUseCase: IParseAadhaarUseCase,
+    @inject('IParseAadhaarUseCase') private readonly _parseAadhaarUseCase: IParseAadhaarUseCase,
   ) {}
   
   public getWelcomeMessage = (_req: Request, res: Response): void => {
@@ -27,7 +27,7 @@ export class AadhaarController {
       }
       const frontBuffer = (files['frontFile'][0] as Express.Multer.File).buffer;
       const backBuffer  = (files['backFile'][0]  as Express.Multer.File).buffer;
-      const result = await this.parseAadhaarUseCase.execute(frontBuffer, backBuffer);
+      const result = await this._parseAadhaarUseCase.execute(frontBuffer, backBuffer);
       res.status(HttpStatus.OK).json({
         status:  true,
         data:    result,
