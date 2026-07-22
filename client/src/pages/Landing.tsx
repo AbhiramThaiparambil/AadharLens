@@ -3,13 +3,8 @@ import Hero from "../components/Landing/Hero";
 import Features from "../components/Landing/Features";
 import Footer from "../components/common/Footer";
 import HowItWorks from "../components/Landing/HowItWorks";
-import { useEffect } from "react";
-import { pingServer } from "../services/service";
 
 const Landing = () => {
-  useEffect(()=>{
-    pingServer()
-  },[])
   return (
     <div className="min-h-screen font-sans text-primary bg-base">
       <Navbar

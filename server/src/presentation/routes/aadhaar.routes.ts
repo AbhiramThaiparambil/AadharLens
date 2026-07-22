@@ -13,4 +13,13 @@ router.post(
   ]),
   aadhaarController.parseAadhaar,
 );
+
+router.post(
+  '/parse-aadhaar/advanced',
+  upload.fields([
+    { name: 'frontFile', maxCount: 1 },
+    { name: 'backFile',  maxCount: 1 },
+  ]),
+  aadhaarController.parseAadhaarAws,
+);
 export default router;
