@@ -8,21 +8,22 @@ import type { ParsedAadhaarData }     from '../../entities/aadhaar.entity.js';
 @injectable()
 export class ParseAadhaarUseCase implements IParseAadhaarUseCase {
   constructor(
-    @inject('IImageProcessor')  private readonly imageProcessor: IImageProcessor,
-    @inject('IOcrService')       private readonly ocrService:     IOcrService,
-    @inject('IExtractorService') private readonly extractor:      IExtractorService,
-    @inject('IValidatorService') private readonly validator:      IValidatorService,
+    @inject('IImageProcessor')  private readonly _imageProcessor: IImageProcessor,
+    @inject('IOcrService')       private readonly _ocrService:     IOcrService,
+    @inject('IExtractorService') private readonly _extractor:      IExtractorService,
+    @inject('IValidatorService') private readonly _validator:      IValidatorService,
   ) {}
+
   async execute(frontImageBuffer: Buffer, backImageBuffer: Buffer): Promise<ParsedAadhaarData> {
     const [processedFront, processedBack] = await Promise.all([
-      this.imageProcessor.processImage(frontImageBuffer),
-      this.imageProcessor.processImage(backImageBuffer),
+      this._imageProcessor.processImage(frontImageBuffer),
+      this._imageProcessor.processImage(backImageBuffer),
     ]);
     const [frontText, backText] = await Promise.all([
-      this.ocrService.extractText(processedFront),
-      this.ocrService.extractText(processedBack),
+      this._ocrService.extractText(processedFront),
+      this._ocrService.extractText(processedBack),
     ]);
-    const rawFields = this.extractor.extract(frontText, backText);
-    return this.validator.validate(rawFields);
+    const rawFields = this._extractor.extract(frontText, backText);
+    return this._validator.validate(rawFields);
   }
 }

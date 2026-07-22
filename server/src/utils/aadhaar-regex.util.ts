@@ -12,6 +12,9 @@ export function extractDob(cleanFrontText: string): string | undefined {
     cleanFrontText.match(/\b(\d{2}\/\d{2}\/\d{4})\b/);
   return match?.[1];
 }
+
+
+
 export function extractGender(cleanFrontText: string): string | undefined {
   const match = cleanFrontText.match(/\b(MALE|FEMALE|TRANSGENDER)\b/i);
   return match?.[1]?.toUpperCase();
